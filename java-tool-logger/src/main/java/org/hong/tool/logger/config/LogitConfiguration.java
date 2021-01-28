@@ -9,6 +9,6 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @EnableAspectJAutoProxy
 public class LogitConfiguration {
     LogitConfiguration() {
-        System.out.println("----- LogitConfiguration -----");
+        System.out.println("----- LogitConfiguration @EnableAspectJAutoProxy-----");
     }
 }

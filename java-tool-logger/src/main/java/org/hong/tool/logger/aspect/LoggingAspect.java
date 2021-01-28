@@ -10,7 +10,6 @@ import org.hong.tool.logger.trace.TraceHelper;
 import org.hong.tool.logger.trace.TraceWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -18,7 +17,6 @@ import java.util.Optional;
 
 @Aspect
 @Component
-@EnableAspectJAutoProxy
 public class LoggingAspect {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
@@ -29,11 +27,9 @@ public class LoggingAspect {
         Arrays.stream(point.getArgs()).forEach(arg -> log.info("Param: [{}]", arg));
     }
 
-    /**
-     * Java 8 Duration, not recommended
-     */
-    /*
-    @Around("@annotation(logit)")
+
+    /** Java 8 Duration, not recommended
+    //@Around("@annotation(logit)")
     public Object around(ProceedingJoinPoint point, Logit logit) throws Throwable {
         Instant startTime = Instant.now();
         Object result = point.proceed();
@@ -45,7 +41,9 @@ public class LoggingAspect {
     */
     @Around("@annotation(logit)")
     public Object around(ProceedingJoinPoint point, Logit logit) throws Throwable {
+        //RFT remove temp var
         TraceWatch traceWatch = new TraceWatch(getMethodName(point));
+        //Use optional to deal with try-catch and null return
         Optional<Object> result = TraceHelper.run(traceWatch, () -> {
             try {
                 return Optional.ofNullable(point.proceed());
